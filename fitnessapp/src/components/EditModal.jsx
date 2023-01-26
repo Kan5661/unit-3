@@ -11,8 +11,11 @@ function EditModal(prop) {
         weight: ""
     }) 
 
-    async function handleSubmit() {
+    async function handleSubmit(e) {
+        e.preventDefault()
+        prop.setDisplayEditModal(false)
         await updateExerciseRec(prop.recId, editExercise)
+        prop.setRefreshPage(prev => prev + 1)
     }
 
     function handleChange(e) {
@@ -45,15 +48,19 @@ function EditModal(prop) {
 
     return(
         <div className={prop.displayEditModal? 'editModal' : 'hideElement'}>
-            <div className="closeEditModal" onClick={() => prop.setDisplayEditModal(false)}>X</div>
-            <form onSubmit={handleSubmit}>                    
-                <input name='type' onChange={handleChange} type='text' placeholder="Edit type"></input>
-                <input name='duration' onChange={handleChange} type='text' placeholder="Edit duration"></input>
-                <input name='intensity' onChange={handleChange} type='number' placeholder="Edit intensity"></input>
-                <input name='weight' onChange={handleChange} type='number' placeholder="Edit weight"></input>
-                <input name='sets' onChange={handleChange} type='number' placeholder="Edit sets"></input>
+            <div  className='closeBtnContainer'>
+            <svg height='25' width='25' className="closeEditModal" onClick={() => prop.setDisplayEditModal(false)}>
+              <line x1='0' y1='12' x2='25' y2='12' stroke='rgb(0, 100, 0)' stroke-width='3' />
+            </svg>
+            </div>
+            <form onSubmit={handleSubmit} className='form'>                    
+                <input className='editInput' name='type' onChange={handleChange} type='text' placeholder="Edit type"></input>
+                <input className='editInput' name='duration' onChange={handleChange} type='text' placeholder="Edit duration"></input>
+                <input className='editInput' name='intensity' onChange={handleChange} type='number' placeholder="Edit intensity"></input>
+                <input className='editInput' name='weight' onChange={handleChange} type='number' placeholder="Edit weight"></input>
+                <input className='editInput' name='sets' onChange={handleChange} type='number' placeholder="Edit sets"></input>
                 <div>
-                    <h3>Upper Body</h3>
+                    <h3 className='upperLower'>Upper Body</h3>
                     <input
                     id="upperBody-true"
                     type="radio"
@@ -71,7 +78,7 @@ function EditModal(prop) {
                     />
                     <label htmlFor="upperBody-false">False</label>
                 </div>
-                <input type='submit'></input>
+                <input className='buttons' type='submit'></input>
             </form>
 
         </div>

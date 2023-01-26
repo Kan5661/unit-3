@@ -14,18 +14,19 @@ export default function CreateExerciseRec() {
   });
   const [exerciseRecs, setExerciseRecs] = useState([])
   const [refreshPage, setRefreshPage] = useState(0)
-  const [displayEditModal, setEditDisplayModal] = useState(false)
+  const [displayEditModal, setDisplayEditModal] = useState(false)
+  const [recId, setRecId] = useState('')
 
   useEffect(() => {
     getExercisesRecs()
     .then(res => {
       setExerciseRecs(res)
-      console.log(exerciseRecs)
     })
   }, [refreshPage])
   
   function handleEdit(exerciseRec) {
-
+    setDisplayEditModal(true)
+    setRecId(exerciseRec._id)
   }
 
   async function handleDelete(exerciseRec) {
@@ -67,33 +68,53 @@ export default function CreateExerciseRec() {
 
 
   return (
-    <div>
-      <EditModal />
-      <h1>Add Exercise</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="addExercisePage">
+      <EditModal setRefreshPage={setRefreshPage} recId={recId} displayEditModal={displayEditModal} setDisplayEditModal={setDisplayEditModal} />
+      <h1 className="createTitle">Add Exercise</h1>
+      <form className="form" onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Choose Exercise"
+          placeholder="Exercise"
           name="type"
           value={form.type}
           onChange={handleChange}
+          className='createInput'
         />
         <input
           type="number"
-          placeholder="Enter the Exercise Duration"
+          placeholder="Duration"
           name="duration"
           value={form.duration}
           onChange={handleChange}
+          className='createInput'
         />
         <input
           type="number"
-          placeholder="Enter a number 1 - 10"
+          placeholder="Intensity: 1-10"
           name="intensity"
           value={form.intensity}
           onChange={handleChange}
+          className='createInput'
           />
+
+        <input
+          type="number"
+          placeholder="Sets"
+          name="sets"
+          value={form.sets}
+          onChange={handleChange}
+          className='createInput'
+          />
+        <input
+          type="number"
+          placeholder="Weight"
+          name="weight"
+          value={form.weight}
+          onChange={handleChange}
+          className='createInput'
+        />
         <div>
-          <h3>Upper Body</h3>
+        <p className="upperLower">Upper Body</p>
         <input
           id="upperBody-true"
           type="radio"
@@ -111,33 +132,42 @@ export default function CreateExerciseRec() {
           />
         <label htmlFor="upperBody-false">False</label>
         </div>
-        <input
-          type="number"
-          placeholder="Enter the number of Sets"
-          name="sets"
-          value={form.sets}
-          onChange={handleChange}
-          />
-        <input
-          type="number"
-          placeholder="Enter Weight"
-          name="weight"
-          value={form.weight}
-          onChange={handleChange}
-        />
-        <button type="submit">Add</button>
+        <button className="buttons" type="submit">Add</button>
       </form>
+      
       <div className="exerciseRecList">
         {exerciseRecs.map(exerciseRec => (
         <div className="exerciseRecs">
-          <p>type: {exerciseRec.type}</p>
-          <p>duration: {exerciseRec.duration}</p>
-          <p>intensity: {exerciseRec.intensity}</p>
-          <p>upper/lower: {exerciseRec.upperBody? 'upper' : 'lower'}</p>
-          <p>weight: {exerciseRec.weight}</p>
-          <p>sets: {exerciseRec.sets}</p>
-          <button onClick={() => handleDelete(exerciseRec)}>delete</button>
-          <button onClick={() => handleEdit(exerciseRec)}>edit</button>
+          <table className="exerciseTable">
+            <tbody>
+              <tr>
+                <th className="keys">TYPE</th>
+                <td className="values">{exerciseRec.type}</td>
+              </tr>
+              <tr>
+                <th className="keys">DURATION</th>
+                <td className="values">{exerciseRec.duration}</td>
+              </tr>
+              <tr>
+                <th className="keys">INTENSITY</th>
+                <td className="values">{exerciseRec.intensity}</td>
+              </tr>
+              <tr>
+                <th className="keys">UPPER/LOWER</th>
+                <td className="values">{exerciseRec.upperBody}</td>
+              </tr>
+              <tr>
+                <th className="keys">WEIGHT</th>
+                <td className="values">{exerciseRec.weight}</td>
+              </tr>
+              <tr>
+                <th className="keys">SETS</th>
+                <td className="values">{exerciseRec.sets}</td>
+              </tr>
+            </tbody>
+          </table>
+          <button className="buttons" onClick={() => handleDelete(exerciseRec)}>Delete</button>
+          <button className="buttons" onClick={() => handleEdit(exerciseRec)}>Edit</button>
         </div>))}
       </div>
     </div>
